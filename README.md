@@ -27,7 +27,7 @@ This project demonstrates how an operational capacity shortfall can be translate
 | Lines | Milk fillers, yogurt cup line, cheese/butter pack |
 | Stores | Main cold store + dispatch dock |
 | Downtime | CIP, changeover, filler fault, quality hold, raw milk shortage |
-| UoM | Retail packs (EA); `LitersPerUnit` on DimProduct for volume story |
+| UoM | Retail packs (units); `LitersPerUnit` on DimProduct for volume story |
 | Holding | Capital/WACC proxy on cold FG (not full FEFO/expiry engine) |
 | COGS | VC = raw milk + packaging + process energy + other (see `docs/COGS_AND_BOM.md`) |
 
@@ -239,7 +239,7 @@ See `final/integrity_checks.json`.
 
 ## Economic model
 
-- **Stepped recovery cost** (default `RECOVERY_COST_MODE=STEPPED`): $2 / $7 / $14 per EA by gross-gap band (first 5%, next to 15%, remainder). `FLAT` mode still uses `RECOVERY_COST_UNIT`.
+- **Stepped recovery cost** (default `RECOVERY_COST_MODE=STEPPED`): $2 / $7 / $14 per unit by gross-gap band (first 5%, next to 15%, remainder). `FLAT` mode still uses `RECOVERY_COST_UNIT`.
 - **Inventory holding cost**: monthly `AvgInventory × StandardVariableCost × (WACC/12)`; `NetCM_after_Holding = NetCMOpportunity − HoldingCost`.
   Holding is charged on **total** average FG, not only OEE-driven extra buffer (documented intentional choice).
 
@@ -250,7 +250,7 @@ See `final/integrity_checks.json`.
 | Data | **Synthetic** (not a real plant extract) | design |
 | `RECOVERY_FRAC` | 0.20 baseline; sensitivity at 0.10 / 0.20 / 0.40 | `ModelAssumptions.csv` |
 | `RECOVERY_COST_MODE` | **STEPPED** (default): tiers $2 / $7 / $14 | `ModelAssumptions.csv` |
-| `RECOVERY_COST_UNIT` | $8 / EA when mode = FLAT | `ModelAssumptions.csv` |
+| `RECOVERY_COST_UNIT` | $8 / unit when mode = FLAT | `ModelAssumptions.csv` |
 | `HOLDING_COST_ANNUAL_WACC` | 18% annual proxy | `ModelAssumptions.csv` |
 | `StandardVariableCost` | Fixed synthetic standards; CM ≈ 28–41% of list price by product | `DimProduct` |
 | Same-period ship | Allowed (no lead time / backlog) | `SAME_PERIOD_SHIP=1` |
