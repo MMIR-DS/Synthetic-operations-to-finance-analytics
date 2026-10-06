@@ -17,7 +17,7 @@ FIN = ROOT / "final"
 OUT = ROOT / "output"
 
 st.set_page_config(
-    page_title="OEE → CM Portfolio",
+    page_title="Operations → Financial Impact Portfolio",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -61,7 +61,7 @@ def fmt_num(x, digits=0):
 
 
 def sidebar_meta(summary: dict, assumptions: pd.DataFrame):
-    st.sidebar.title("OEE → Revenue → CM")
+    st.sidebar.title("Financial Impact → CM")
     st.sidebar.caption("North Valley Dairy (synthetic) · not a real plant")
     st.sidebar.markdown("---")
     mode = summary.get("recovery_cost_mode") or summary.get("context", {}).get("recovery_cost_mode")
@@ -229,7 +229,7 @@ def page_decision(summary: dict):
 
 
 def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
-    st.header("Executive overview — North Valley Dairy")
+    st.header("Executive decision overview — North Valley Dairy")
     st.info(
         "**Modeled / assumption-driven / not a forecast.** Synthetic data. "
         "Headline opportunity is **Net CM opportunity**; total-FG holding is context only."
@@ -240,12 +240,12 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
         oee = (summary.get("context") or {}).get("oee_baseline_time_weighted")
     gap = summary.get("gap_waterfall") or {}
 
-    st.subheader("Headline (modeled mitigation)")
+    st.subheader("Financial headline")
     h1, h2, h3, h4 = st.columns(4)
-    h1.metric("Time-weighted OEE", f"{float(oee):.1%}" if oee is not None else "—")
+    h1.metric("Net CM opportunity", fmt_money(summary.get("net_cm_opportunity")))
     h2.metric("Gross gap (EA)", fmt_num(gap.get("gross_gap") or summary.get("total_gross_gap_units")))
     h3.metric("CM exposure (residual lost)", fmt_money(summary.get("cm_exposure")))
-    h4.metric("★ Net CM opportunity", fmt_money(summary.get("net_cm_opportunity")))
+    h4.metric("Time-weighted OEE", f"{float(oee):.1%}" if oee is not None else "—")
     dec = load_json("Decision_Action_Summary.json")
     if dec and (dec.get("portfolio") or {}).get("expected_risk_adjusted_cm") is not None:
         st.caption(
@@ -276,7 +276,7 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
     c5.metric("Protected CM", fmt_money(summary.get("protected_cm")))
     c6.metric("Recovery cost (stepped)", fmt_money(summary.get("recovery_cost")))
 
-    st.subheader("Unit gap waterfall")
+    st.subheader("Operational gap → financial exposure")
     if gap:
         labels = ["Gross gap", "Inventory absorbed", "Recovered", "Substituted", "Lost sales"]
         # waterfall style: start gross, then negative components
@@ -301,7 +301,7 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
         st.plotly_chart(fig, use_container_width=True)
         st.caption("Identity: GrossGap = InvAbs + Recovered + Substituted + LostSales")
 
-    st.subheader("Dollar bridge (mitigation)")
+    st.subheader("Contribution-margin decision bridge")
     prot = float(summary.get("protected_cm") or (summary.get("opportunity_bridge") or {}).get("protected_cm_from_recovery_and_substitution") or 0)
     rcost = float(summary.get("recovery_cost") or 0)
     hold = float(summary.get("inventory_holding_cost") or 0)
