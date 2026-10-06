@@ -92,11 +92,11 @@ Operational loss / OEE
 | Time-weighted OEE | **83.98%** |
 | Actual net revenue | **$209.97 M** |
 | Actual contribution margin | **$61.66 M** |
-| Gross production gap | 133,743 EA |
-| Opening inventory absorbed | **18,424 EA** |
-| Recovered units | **23,064 EA** |
-| Substituted units | **45,288 EA** |
-| Potential lost sales | **46,967 EA** |
+| Gross production gap | 133,743 units |
+| Opening inventory absorbed | **18,424 units** |
+| Recovered units | **23,064 units** |
+| Substituted units | **45,288 units** |
+| Potential lost sales | **46,967 units** |
 | CM exposure (residual lost sales) | **$1.32 M** |
 | Protected CM (recovery + substitution) | **$2.09 M** |
 | Recovery cost (stepped) | **$0.80 M** |
