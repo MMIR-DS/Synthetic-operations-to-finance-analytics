@@ -12,7 +12,7 @@ This project demonstrates how an operational capacity shortfall can be translate
 
 > **Authoritative numbers:** treat [`final/Executive_Summary_Numbers.json`](final/Executive_Summary_Numbers.json) as the source of truth after any run (not screenshots, not old LinkedIn drafts). README tables are derived from that file.
 
-> **So what:** the model identifies ~**$1.28M** of modeled net CM opportunity after recovery/substitution cost. The decision is not “how do we maximize OEE?” but “which mitigation actions create the most defensible contribution-margin value under capacity and cost constraints?” After an **attributed incremental holding proxy** (~$0.02M) → ~**$1.26M**. After **total FG** holding (~$0.86M) → ~**$0.43M** (context only — not proven OEE-caused). **In this synthetic scenario**, inventory policy can materially change the economics of OEE recovery. See `final/EXECUTIVE_CASE_STUDY.md`.
+> **So what:** the model identifies about **$1.28M** of modeled net CM opportunity after recovery/substitution cost. The decision is not “how do we maximize OEE?” but “which mitigation actions create the most defensible contribution-margin value under capacity and cost constraints?” After an **attributed incremental holding proxy** (**$0.02M**) → about **$1.26M**. After **total FG** holding (**$0.86M**) → about **$0.43M** (context only — not proven OEE-caused). **In this synthetic scenario**, inventory policy can materially change the economics of OEE recovery. See `final/EXECUTIVE_CASE_STUDY.md`.
 
 > **History:** [CHANGELOG.md](CHANGELOG.md) · detailed notes in [`docs/changelog/`](docs/changelog/)
 
