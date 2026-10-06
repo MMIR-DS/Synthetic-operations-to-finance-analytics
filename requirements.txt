@@ -2,5 +2,6 @@
 pandas==3.0.3
 numpy==2.4.4
 
-# Dashboard (optional)
-# pip install -r dashboard/requirements-dashboard.txt
+# Dashboard
+streamlit>=1.28,<2
+plotly>=5.18,<7
