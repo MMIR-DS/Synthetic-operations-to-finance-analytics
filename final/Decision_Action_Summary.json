@@ -1,0 +1,18 @@
+{
+  "definition_baseline": "Inventory absorption only; recovery_frac=0; no alternate-line substitution",
+  "definition_action": "Engine waterfall: inventory + recovery + substitution (FactImpact)",
+  "p_realize": 0.65,
+  "p_realize_note": "Assumption from ModelAssumptions; not statistically estimated",
+  "portfolio": {
+    "baseline_cm_exposure": 3409231.04,
+    "action_cm_exposure": 1322823.59,
+    "delta_cm_exposure_avoided": 2086407.45,
+    "action_net_cm_opportunity": 1282935.16,
+    "delta_net_operational_cm": 1282935.16,
+    "expected_risk_adjusted_cm": 833907.91,
+    "rows": 96,
+    "rows_with_positive_delta_net": 37
+  },
+  "figure_class": "Modeled / assumption-driven / not a forecast",
+  "ranking_note": "Default rank: Expected_RiskAdjustedCM. Capacity-aware rank: NetCM_per_ConstrainedHour when MitigationHours > 0. CM/unit ranking can differ from CM/hour when rates differ across SKUs."
+}

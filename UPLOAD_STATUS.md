@@ -1,30 +1,44 @@
-# Upload status
+# Upload status (updated)
 
-Portfolio **v1.9.0.1** — partial publish via Grok GitHub connector.
+Portfolio **v1.9.0.1**
 
-## On GitHub now
+## On GitHub
 
-- README, CHANGELOG, requirements, `.gitignore`
-- `run_pipeline.py`, `shared/cost_model.py`
-- `06_sensitivity_same_period_ship.py`, `08_downtime_reason_pareto.py`, `10_pl_bridge.py`
-- `tests/` (identity smoke tests)
-- `docs/` (DATA_CONTRACT, KPI_TREE, COGS_AND_BOM, changelog 1.9.0.1)
-- `final/Executive_Summary_Numbers.json`, `execution_report.txt`, decision_logic_checks
+### Pipeline scripts
+- `run_pipeline.py`
+- `03_sensitivity_recovery.py`
+- `06_sensitivity_same_period_ship.py`
+- `07_baseline_vs_action.py`
+- `08_downtime_reason_pareto.py`
+- `09_finance_decision_artifacts.py`
+- `10_pl_bridge.py`
+- `shared/cost_model.py`
 
-## Still to upload (local package / next push)
+### Docs & framing
+- `README.md`, `CHANGELOG.md`
+- `docs/DATA_CONTRACT.md`, `KPI_TREE.md`, `COGS_AND_BOM.md`
+- `docs/changelog/CHANGELOG_v1.9.0.1.md`
 
-- `01_generate_synthetic_data_fixed.py` (~30 KB)
-- `02_oee_revenue_cm_engine_fixed.py` (~40 KB) — core engine
-- `03_sensitivity_recovery.py`, `04_build_executive_pack.py`, `05_build_sqlite_with_keys.py`
-- `07_baseline_vs_action.py`, `09_finance_decision_artifacts.py`
-- `dashboard/app.py`, `dashboard/app_fa.py`
-- Full `DATA_DICTIONARY.md`, `docs/DECISION_BRIEF.md`, `docs/PROCESS_AND_CAUSAL_MAP.md`
-- Remaining `final/*.csv` outputs (regenerate with `python run_pipeline.py`)
+### Outputs
+- `final/Executive_Summary_Numbers.json`
+- `final/Decision_Action_Summary.json`
+- `final/Budget_CM_Gap_Reconciliation.md`
+- `final/decision_logic_checks.json`
+- `execution_report.txt`
 
-## Authoritative numbers (reference run)
+### Tests
+- `tests/test_*.py` (smoke identities)
 
-- Net CM opportunity: **$1,282,935.17**
-- OEE (time-weighted): **83.98%**
-- Integrity: **24/24 PASS**
+## Still to upload
 
-See `final/Executive_Summary_Numbers.json`.
+| File | Why important |
+|------|----------------|
+| `01_generate_synthetic_data_fixed.py` | Data generator |
+| `02_oee_revenue_cm_engine_fixed.py` | **Core engine** |
+| `04_build_executive_pack.py` | Exec pack |
+| `05_build_sqlite_with_keys.py` | SQLite PK/FK |
+| `dashboard/app.py`, `app_fa.py` | Streamlit UI |
+| `DATA_DICTIONARY.md`, full `DECISION_BRIEF`, full `DATA_MODEL` | Docs depth |
+| `final/*.csv` | Regenerable via pipeline |
+
+**Note:** Clone alone cannot yet run end-to-end without `01`/`02`. Continue push or upload ZIP from PC.
