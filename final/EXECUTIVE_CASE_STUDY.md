@@ -39,7 +39,7 @@ With real data: estimate by loss category from downtime→shipment lags (or surv
 
 Do **not** equate the budget miss with OEE opportunity. Detail: `final/Budget_CM_Gap_Reconciliation.md`.
 
-### CM vs modeled Gross Profit (v1.9 — do not interchange)
+### CM vs modeled Gross Profit (v1.10 — do not interchange)
 
 | View | Definition | Current |
 |------|------------|--------:|
