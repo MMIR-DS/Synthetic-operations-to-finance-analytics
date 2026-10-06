@@ -73,7 +73,7 @@ def period_label_dual(period_key) -> str:
 
 
 st.set_page_config(
-    page_title="OEE تا حاشیه مشارکت",
+    page_title="اثر مالی عملیات → حاشیه مشارکت",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -131,7 +131,7 @@ def main():
     scen = load_csv("final", "Scenario_Results.csv")
     assumptions = load_csv("output", "ModelAssumptions.csv")
 
-    st.sidebar.title("OEE → حاشیه مشارکت")
+    st.sidebar.title("اثر مالی عملیات → حاشیه مشارکت")
     st.sidebar.caption("لبنیات دره شمالی (فرضی) — نه کارخانه واقعی")
     st.sidebar.markdown("---")
     if len(assumptions):
@@ -186,7 +186,7 @@ def page_decision(summary: dict):
                      use_container_width=True, hide_index=True)
 
 def page_executive(summary: dict, sens: pd.DataFrame):
-    st.header("خلاصه مدیریتی — لبنیات دره شمالی")
+    st.header("خلاصه تصمیم مالی — لبنیات دره شمالی")
     st.info(
         "همه ارقام **مدل‌شده / فرض‌محور / نه پیش‌بینی** هستند. "
         "هزینه بازیابی پلهای و هزینه نگهداری موجودی روی کل موجودی متوسط اعمال شده است."
@@ -213,7 +213,7 @@ def page_executive(summary: dict, sens: pd.DataFrame):
     gap = summary.get("gap_waterfall") or {}
     c8.metric("شکاف ناخالص (عدد)", fmt_num(gap.get("gross_gap") or summary.get("total_gross_gap_units")))
 
-    st.subheader("تجزیه شکاف واحدی")
+    st.subheader("شکاف عملیاتی → اثر مالی")
     if gap:
         labs = ["شکاف ناخالص", "جذب موجودی", "بازیابی", "جایگزینی خط", "فروش ازدسترفته"]
         vals = [
@@ -230,7 +230,7 @@ def page_executive(summary: dict, sens: pd.DataFrame):
         st.plotly_chart(fig, use_container_width=True)
         st.caption("هویت: شکاف ناخالص = جذب موجودی + بازیابی + جایگزینی + فروش ازدسترفته")
 
-    st.subheader("پل دلاری (بازیابی و نگهداری)")
+    st.subheader("پل تصمیم حاشیه مشارکت")
     prot = float(summary.get("protected_cm") or 0)
     rcost = float(summary.get("recovery_cost") or 0)
     hold = float(summary.get("inventory_holding_cost") or 0)
