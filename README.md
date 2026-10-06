@@ -4,6 +4,10 @@
 
 **Synthetic operations-to-finance analytics portfolio project**
 
+[🚀 **Live Demo**](https://operations-finance-analytics.onrender.com/) · [📄 **Executive Case Study**](final/EXECUTIVE_CASE_STUDY.md)
+
+> **Live demo:** The deployed Streamlit dashboard is available above. Because it runs on Render's free tier, the first load after inactivity may take a short time.
+
 This project demonstrates how an operational capacity shortfall can be translated into a **financial decision**: how much contribution margin is exposed, how much can be protected through mitigation, what that mitigation costs, and where constrained capacity should be allocated. OEE is an operational input to the chain—not the financial endpoint.
 
 > **Data is synthetic.** All figures are model outputs under documented assumptions, not claims about a real plant.
