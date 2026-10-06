@@ -312,6 +312,7 @@ These are extensions, not admissions that the current chain is wrong.
 
 ```bash
 Python 3.12.3  # reference run
+Python 3.12.3  # reference run
 pip install -r requirements.txt                  # pipeline
 pip install -r dashboard/requirements-dashboard.txt  # Streamlit UI
 # or: pip install -r requirements-dev.txt
