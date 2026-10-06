@@ -1,10 +1,10 @@
-# OEE → Revenue → Contribution Margin Pipeline
+# Operations → Financial Impact → Contribution Margin Decision Model
 
-**Version 1.9.0.1** — imaginary dairy factory domain skin · [نسخه فارسی / Persian README](README.fa.md) · `streamlit run dashboard/app_fa.py` — star-schema data model: `PeriodKey` on inventory, `DimPeriod`/`DimLocation`, SQLite PK/FK.
+**Version 1.10.0** — imaginary dairy factory domain skin · [نسخه فارسی / Persian README](README.fa.md) · `streamlit run dashboard/app_fa.py` — star-schema data model: `PeriodKey` on inventory, `DimPeriod`/`DimLocation`, SQLite PK/FK.
 
 **Synthetic operations-to-finance analytics portfolio project**
 
-This project demonstrates how manufacturing OEE losses can be translated into **unit gaps**, **shipment shortfalls**, **revenue exposure**, and **contribution-margin impact** — with inventory roll-forward, recovery/substitution logic, PVM reconciliation, scenario analysis, and audit-style integrity checks.
+This project demonstrates how an operational capacity shortfall can be translated into a **financial decision**: how much contribution margin is exposed, how much can be protected through mitigation, what that mitigation costs, and where constrained capacity should be allocated. OEE is an operational input to the chain—not the financial endpoint.
 
 > **Data is synthetic.** All figures are model outputs under documented assumptions, not claims about a real plant.
 
@@ -12,7 +12,7 @@ This project demonstrates how manufacturing OEE losses can be translated into **
 
 > **Authoritative numbers:** treat [`final/Executive_Summary_Numbers.json`](final/Executive_Summary_Numbers.json) as the source of truth after any run (not screenshots, not old LinkedIn drafts). README tables are derived from that file.
 
-> **So what:** Modeled Net CM opportunity ~**$1.28M**. After an **attributed incremental holding proxy** (~$0.02M) → ~**$1.26M**. After **total FG** holding (~$0.86M) → ~**$0.43M** (context only — not proven OEE-caused). **In this synthetic scenario**, inventory policy can materially change the economics of OEE recovery. See `final/EXECUTIVE_CASE_STUDY.md`.
+> **So what:** the model identifies ~**$1.28M** of modeled net CM opportunity after recovery/substitution cost. The decision is not “how do we maximize OEE?” but “which mitigation actions create the most defensible contribution-margin value under capacity and cost constraints?” After an **attributed incremental holding proxy** (~$0.02M) → ~**$1.26M**. After **total FG** holding (~$0.86M) → ~**$0.43M** (context only — not proven OEE-caused). **In this synthetic scenario**, inventory policy can materially change the economics of OEE recovery. See `final/EXECUTIVE_CASE_STUDY.md`.
 
 > **History:** [CHANGELOG.md](CHANGELOG.md) · detailed notes in [`docs/changelog/`](docs/changelog/)
 
@@ -46,23 +46,23 @@ These documents define **what decision the model supports** before synthetic tab
 
 **Decision in one line:** weekly planning chooses interventions to improve **modeled net CM** versus doing nothing—not to optimize a vanity OEE%.
 
-## Business problem
+## Financial decision problem
 
-At **North Valley Dairy** (imaginary), many OEE dashboards stop at a percentage. The filling hall sees “OEE = 84%” but commercial and finance cannot answer:
+At **North Valley Dairy** (imaginary), operations can see an OEE percentage, but Finance and Planning need a different answer: where does the operational shortfall become a financial exposure, and which mitigation action is worth paying for?
 
-- How many **retail packs / liters** of milk or yogurt did we fail to ship?
-- After **cold-store buffer** and **OT / alternate filler**, what is still unmet?
-- What **contribution margin** is at risk on those shortfalls?
-- Which **SKU–month** is worth overtime or capacity moves after recovery cost?
+- How much **contribution margin** remains exposed after inventory and mitigation?
+- Which **SKU–month** has the highest value after recovery cost?
+- Where does constrained capacity generate the most **CM per hour**?
+- Which conclusions survive changes in recovery and operating assumptions?
 
 This pipeline closes that gap for a **synthetic dairy** case — not a real plant extract.
 
 ---
 
-## Approach
+## Decision chain
 
 ```text
-OEE (A × P × Q)
+Operational loss / OEE
   → good production capacity
   → production gap (FirmDemand − PrimarySupply)
   → opening-inventory absorption
@@ -85,7 +85,7 @@ OEE (A × P × Q)
 
 ## Key results (FY2024 synthetic run)
 
-> Regenerated from `final/Executive_Summary_Numbers.json` (script_version **1.9.0**). Do not edit cells by hand.
+> Regenerated from `final/Executive_Summary_Numbers.json` (script_version **1.10.0**). Do not edit cells by hand.
 
 | KPI | Value |
 |-----|------:|
@@ -120,7 +120,7 @@ Net CM opportunity  =  Protected CM − recovery cost
 - **Alternate-line substitution** is allowed only when the capability bridge contains a different physical line from the primary line  
 - **Modeled net CM opportunity** = protected CM from modeled recovery/substitution minus recovery cost; it is not total company financial opportunity  
 
-### Insights
+### Decision insights
 
 1. **High OEE does not mean zero financial leakage.** ~84% OEE coexists with ~47k residual lost-sales units and ~$1.32M residual CM exposure after opening-inventory absorption, recovery, and valid line substitution.
 2. **Scenario economics depend on both operational improvement and mitigation cost.** Under stepped recovery costs, the modeled +1pt OEE case can still be net negative after mitigation cost, while larger OEE improvements become positive in this synthetic scenario.
@@ -170,7 +170,7 @@ final/    # analytics outputs, integrity, SQLite
 ---
 
 
-## CM vs modeled Gross Profit (v1.9.0)
+## CM vs modeled Gross Profit
 
 | Metric | Meaning |
 |--------|---------|
@@ -237,7 +237,7 @@ See `final/integrity_checks.json`.
 
 ---
 
-## v1.7 economic extensions
+## Economic model
 
 - **Stepped recovery cost** (default `RECOVERY_COST_MODE=STEPPED`): $2 / $7 / $14 per EA by gross-gap band (first 5%, next to 15%, remainder). `FLAT` mode still uses `RECOVERY_COST_UNIT`.
 - **Inventory holding cost**: monthly `AvgInventory × StandardVariableCost × (WACC/12)`; `NetCM_after_Holding = NetCMOpportunity − HoldingCost`.
@@ -258,14 +258,14 @@ See `final/integrity_checks.json`.
 
 All financial figures are **model results under these assumptions**, not business claims about a real company.
 
-## Dashboard (Streamlit)
+## Dashboard — finance-first
 
 ```bash
 pip install -r dashboard/requirements-dashboard.txt
 streamlit run dashboard/app.py
 ```
 
-Pages: Executive · Product deep dive · Sensitivity · Scenarios.  
+Pages: **Executive decision · Decision ranking · P&L bridge · Product economics · Sensitivity · Scenarios**.  
 Reads `final/` + `output/` only (does not re-run the pipeline).
 
 ## Limitations (explicit)
@@ -308,9 +308,10 @@ These are **illustrative parameter shifts**, not approved business cases.
 
 These are extensions, not admissions that the current chain is wrong.
 
-## Dependencies
+## Reference environment and dependencies
 
 ```bash
+Python 3.12.3  # reference run
 pip install -r requirements.txt                  # pipeline
 pip install -r dashboard/requirements-dashboard.txt  # Streamlit UI
 # or: pip install -r requirements-dev.txt
