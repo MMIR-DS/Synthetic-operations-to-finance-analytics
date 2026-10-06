@@ -97,7 +97,7 @@ def sidebar_meta(summary: dict, assumptions: pd.DataFrame):
 
 def page_pl_bridge():
     st.header("P&L Bridge — Budget to Actual Gross Profit")
-    st.caption("Modeled · no fixed overhead · product-level MixEffect = 0")
+    st.caption("Modeled budget-to-actual bridge · no fixed overhead · product-level MixEffect = 0. This explains the modeled bridge; it does not claim OEE causally explains the full P&L variance.")
     summary = load_json("PL_Bridge_Summary.json")
     if summary:
         c1, c2, c3, c4 = st.columns(4)
@@ -115,13 +115,13 @@ def page_pl_bridge():
     if path.exists():
         df = pd.read_csv(path)
         st.subheader("By period")
-        st.dataframe(df, use_container_width=True, hide_index=True)
+        st.dataframe(df, width="stretch", hide_index=True)
         if len(df):
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=df.PeriodKey.astype(str), y=df.BudgetGP, name="Budget GP", line=dict(dash="dash")))
             fig.add_trace(go.Scatter(x=df.PeriodKey.astype(str), y=df.ActualGP, name="Actual GP"))
             fig.update_layout(height=360, margin=dict(t=40, b=40), title="Gross Profit trend")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
             # simple waterfall for totals
             tot_b = float(df.BudgetRevenue.sum())
             tot_v = float(df.VolumeEffect.sum())
@@ -133,13 +133,13 @@ def page_pl_bridge():
                 measure=["absolute", "relative", "relative", "total"],
             ))
             fig2.update_layout(height=360, title="Revenue bridge (portfolio total)", margin=dict(t=40, b=40))
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width="stretch")
     else:
         st.warning("Run 10_pl_bridge.py (or run_pipeline.py) to generate PL_Bridge_Summary.csv")
     det = FIN / "PL_Bridge_Detail.csv"
     if det.exists():
         with st.expander("Product × period detail"):
-            st.dataframe(pd.read_csv(det).head(50), use_container_width=True, hide_index=True)
+            st.dataframe(pd.read_csv(det).head(50), width="stretch", hide_index=True)
 
 
 def page_decision(summary: dict):
@@ -160,6 +160,12 @@ def page_decision(summary: dict):
         f"Exposure avoided: {fmt_money(port.get('delta_cm_exposure_avoided'))} · "
         f"Positive Δ periods: {port.get('rows_with_positive_delta_net')} / {port.get('rows')}"
     )
+    st.info(
+        f"**Decision rule:** rank interventions first by expected risk-adjusted CM, then use "
+        f"Net CM per constrained hour to decide where scarce capacity should go. The modeled portfolio "
+        f"creates {fmt_money(port.get('delta_net_operational_cm'))} of net operational CM before applying "
+        f"the P_REALIZE factor."
+    )
     path = FIN / "Decision_Action_Comparison.csv"
     if path.exists():
         df = pd.read_csv(path)
@@ -170,7 +176,7 @@ def page_decision(summary: dict):
             "Delta_NetOperationalCM", "Expected_RiskAdjustedCM",
             "MitigationHours", "NetCM_per_ConstrainedHour",
         ]]
-        st.dataframe(show, use_container_width=True, hide_index=True)
+        st.dataframe(show, width="stretch", hide_index=True)
         fig = px.bar(
             top.head(10),
             x="ProductID",
@@ -179,7 +185,7 @@ def page_decision(summary: dict):
             title="Top 10 by expected risk-adjusted CM",
         )
         fig.update_layout(height=340, margin=dict(t=40, b=40))
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         st.subheader("Rank by capacity efficiency (Net CM per constrained hour)")
         st.caption(
@@ -196,7 +202,7 @@ def page_decision(summary: dict):
                     "NetCM_per_ConstrainedHour", "ProtectedCM_per_ConstrainedHour",
                     "Delta_NetOperationalCM",
                 ]],
-                use_container_width=True, hide_index=True,
+                width="stretch", hide_index=True,
             )
             fig2 = px.bar(
                 cap.head(10),
@@ -205,25 +211,25 @@ def page_decision(summary: dict):
                 title="Top 10 by Net CM / constrained hour",
             )
             fig2.update_layout(height=340, margin=dict(t=40, b=40))
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width="stretch")
 
         sens_p = FIN / "Sensitivity_P_Realize.csv"
         if sens_p.exists():
             st.subheader("P_REALIZE sensitivity")
             st.caption("Assumption-based realization factor — not empirically fitted.")
             sp = pd.read_csv(sens_p)
-            st.dataframe(sp, use_container_width=True, hide_index=True)
+            st.dataframe(sp, width="stretch", hide_index=True)
             fig3 = px.line(sp, x="P_REALIZE", y="Expected_RiskAdjustedCM", markers=True,
                            title="Expected risk-adjusted CM vs P_REALIZE")
             fig3.update_layout(height=320, margin=dict(t=40, b=40))
-            st.plotly_chart(fig3, use_container_width=True)
+            st.plotly_chart(fig3, width="stretch")
 
         pareto_path = FIN / "Downtime_Reason_Pareto.csv"
         if pareto_path.exists():
             st.subheader("Downtime reason Pareto (minutes)")
             st.caption("Descriptive only — recovery is not yet reason-specific.")
             pr = pd.read_csv(pareto_path)
-            st.dataframe(pr.head(10), use_container_width=True, hide_index=True)
+            st.dataframe(pr.head(10), width="stretch", hide_index=True)
     else:
         st.warning("Run 07_baseline_vs_action.py to generate Decision_Action_Comparison.csv")
 
@@ -254,27 +260,37 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
             f"— see Decision page"
         )
 
-    st.subheader("Holding-cost views (do not conflate)")
-    k1, k2, k3 = st.columns(3)
-    k1.metric(
-        "After incremental holding",
+    st.subheader("Decision readout")
+    decision_cols = st.columns(3)
+    decision_cols[0].metric(
+        "Protected CM",
+        fmt_money(summary.get("protected_cm")),
+        help="Modeled contribution margin protected through recovery and substitution.",
+    )
+    decision_cols[1].metric(
+        "Recovery cost",
+        fmt_money(summary.get("recovery_cost")),
+        help="Modeled stepped recovery cost.",
+    )
+    decision_cols[2].metric(
+        "Net CM after incremental holding",
         fmt_money(summary.get("net_cm_after_incremental_holding")),
-        delta=f"incr. cost {fmt_money(summary.get('incremental_holding_cost'))}",
+        delta=f"incremental holding {fmt_money(summary.get('incremental_holding_cost'))}",
     )
-    k2.metric(
-        "After total FG holding",
-        fmt_money(summary.get("net_cm_after_holding")),
-        delta=f"total hold {fmt_money(summary.get('inventory_holding_cost'))}",
-    )
-    k3.metric("Protected CM − recovery cost", fmt_money(summary.get("protected_cm")))
     st.caption(
-        "Incremental holding ≈ cost on inventory **absorbed into the gap**. "
-        "Total FG holding is **not** proven OEE-attributable — sensitivity/context only."
+        "Decision identity: Protected CM − Recovery cost = Net CM opportunity. "
+        "Incremental holding is shown separately; total-FG holding is context only."
     )
 
-    c5, c6 = st.columns(2)
-    c5.metric("Protected CM", fmt_money(summary.get("protected_cm")))
-    c6.metric("Recovery cost (stepped)", fmt_money(summary.get("recovery_cost")))
+    dec_port = (dec or {}).get("portfolio") or {}
+    expected = dec_port.get("expected_risk_adjusted_cm")
+    if expected is not None:
+        st.info(
+            f"**What should management do?** Prioritize the constrained periods/SKUs with the highest "
+            f"expected risk-adjusted value (**{fmt_money(expected)}** portfolio-wide under P_REALIZE="
+            f"{(dec or {}).get('p_realize')}). Use the Decision page to compare total $ value with "
+            f"CM per constrained hour rather than optimizing OEE alone."
+        )
 
     st.subheader("Operational gap → financial exposure")
     if gap:
@@ -298,7 +314,7 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
             totals={"marker": {"color": "#dc2626"}},
         ))
         fig.update_layout(height=380, margin=dict(t=30, b=40, l=40, r=20))
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
         st.caption("Identity: GrossGap = InvAbs + Recovered + Substituted + LostSales")
 
     st.subheader("Contribution-margin decision bridge")
@@ -318,7 +334,7 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
         connector={"line": {"color": "#888"}},
     ))
     fig2.update_layout(height=380, margin=dict(t=30, b=40, l=40, r=20))
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width="stretch")
     st.caption("Identity: NetCMOpportunity = ProtectedCM − RecoveryCost. Total-FG holding is a separate context metric.")
 
     if len(sens):
@@ -332,7 +348,7 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
         )
         fig3.update_traces(textposition="outside")
         fig3.update_layout(height=360, margin=dict(t=30, b=40))
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, width="stretch")
 
 
 def page_product(impact: pd.DataFrame, products: list):
@@ -383,16 +399,19 @@ def page_product(impact: pd.DataFrame, products: list):
         .sort_values("NetCMOpportunity", ascending=False)
     )
 
+    top = agg.head(10)
+    st.caption("Ranking is by modeled Net CM opportunity — not OEE. Use the table below for CM exposure and holding-cost context.")
     fig = px.bar(
-        agg,
+        top,
         x="ProductID",
         y="NetCMOpportunity",
-        color="CMExposure",
+        text="NetCMOpportunity",
         labels={"NetCMOpportunity": "Net CM opportunity ($)"},
-        title="Product ranking by Net CM opportunity (not OEE)",
+        title="Top products by Net CM opportunity",
     )
-    fig.update_layout(height=400)
-    st.plotly_chart(fig, use_container_width=True)
+    fig.update_traces(texttemplate="$%{text:,.0f}", textposition="outside")
+    fig.update_layout(height=400, margin=dict(t=50, b=40))
+    st.plotly_chart(fig, width="stretch")
 
     st.subheader("Detail table")
     show_cols = [
@@ -418,7 +437,7 @@ def page_product(impact: pd.DataFrame, products: list):
     ]
     st.dataframe(
         df[show_cols].sort_values(["NetCMOpportunity"], ascending=False),
-        use_container_width=True,
+        width="stretch",
         height=420,
     )
 
@@ -433,7 +452,14 @@ def page_sensitivity(sens: pd.DataFrame, ship: pd.DataFrame, impact: pd.DataFram
         if sens.empty:
             st.warning("Sensitivity_RecoveryFrac.csv missing — run 03_sensitivity_recovery.py")
         else:
-            st.dataframe(sens, use_container_width=True)
+            best = sens.loc[sens["NetCMOpportunity"].idxmax()]
+            base_rows = sens.loc[sens["Label"].eq("Baseline")]
+            base = base_rows.iloc[0] if len(base_rows) else sens.iloc[0]
+            st.info(
+                f"**Readout:** modeled Net CM opportunity rises from {fmt_money(base['NetCMOpportunity'])} "
+                f"at the baseline recovery assumption to {fmt_money(best['NetCMOpportunity'])} at the "
+                f"highest tested recovery case. The trade-off is that recovery adds cost as it adds protected CM."
+            )
             fig = go.Figure()
             fig.add_trace(go.Scatter(
                 x=sens.RecoveryFrac, y=sens.ProtectedCM, name="Protected CM", mode="lines+markers"
@@ -449,14 +475,18 @@ def page_sensitivity(sens: pd.DataFrame, ship: pd.DataFrame, impact: pd.DataFram
                 yaxis_title="$",
                 height=400,
                 legend=dict(orientation="h"),
+                margin=dict(t=35, b=40),
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
+            with st.expander("View sensitivity table"):
+                st.dataframe(sens, width="stretch", hide_index=True)
 
     with tab2:
         if ship.empty:
             st.warning("Sensitivity_SamePeriodShip.csv missing — run 06_sensitivity_same_period_ship.py")
         else:
-            st.dataframe(ship, use_container_width=True)
+            with st.expander("View underlying sensitivity table"):
+                st.dataframe(ship, width="stretch", hide_index=True)
             fig = px.bar(
                 ship,
                 x="Label",
@@ -466,7 +496,7 @@ def page_sensitivity(sens: pd.DataFrame, ship: pd.DataFrame, impact: pd.DataFram
             )
             fig.update_traces(texttemplate="%{text:,.0f}", textposition="outside")
             fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
     with tab3:
         if impact.empty or "AvgInventory" not in impact.columns:
@@ -499,19 +529,32 @@ def page_scenarios(scen: pd.DataFrame):
         "Column **NetCMImpact_after_RecoveryCost** is scenario-specific "
         "(Δ CM exposure − scenario recovery cost), not the baseline NetCMOpportunity identity."
     )
-    st.dataframe(scen, use_container_width=True)
 
     ycol = "NetCMImpact_after_RecoveryCost" if "NetCMImpact_after_RecoveryCost" in scen.columns else "CMImpact"
+    ranked = scen.sort_values(ycol, ascending=False).copy()
+    best = ranked.iloc[0]
+    positive = int((ranked[ycol] > 0).sum())
+    st.info(
+        f"**Scenario readout:** {positive} of {len(ranked)} modeled scenarios create positive net CM after "
+        f"scenario recovery cost. The strongest case is **{best['ScenarioName']}** at "
+        f"**{fmt_money(best[ycol])}**; negative results indicate that modeled mitigation cost outweighs "
+        f"the CM exposure avoided under that scenario."
+    )
     fig = px.bar(
-        scen,
+        ranked,
         x="ScenarioID",
         y=ycol,
-        color="ScenarioType",
-        hover_data=[c for c in ["ScenarioName", "LostUnits_scenario", "CMExposure_scenario"] if c in scen.columns],
-        title=ycol,
+        hover_data=[c for c in ["ScenarioName", "ScenarioType", "LostUnits_scenario", "CMExposure_scenario"] if c in ranked.columns],
+        title="Net CM impact after scenario recovery cost",
+        labels={ycol: "Net CM impact ($)", "ScenarioID": "Scenario"},
     )
-    fig.update_layout(height=420)
-    st.plotly_chart(fig, use_container_width=True)
+    fig.add_hline(y=0, line_dash="dash", line_width=1)
+    fig.update_layout(height=420, margin=dict(t=45, b=40))
+    st.plotly_chart(fig, width="stretch")
+
+    with st.expander("View scenario table"):
+        st.dataframe(ranked, width="stretch", hide_index=True)
+
 
     if "LostUnits_baseline" in scen.columns and "LostUnits_scenario" in scen.columns:
         melt = scen.melt(
@@ -529,7 +572,7 @@ def page_scenarios(scen: pd.DataFrame):
             title="Lost units: baseline vs scenario",
         )
         fig2.update_layout(height=400)
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
 
 def main():
