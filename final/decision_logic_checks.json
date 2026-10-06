@@ -1,0 +1,7 @@
+{
+  "baseline_inventory_only_identity": true,
+  "action_lost_le_baseline_lost": true,
+  "delta_net_equals_action_net": true,
+  "p_realize_sensitivity_matches_scalar": true,
+  "note": "Ordinary inventory absorption is inputs to both worlds; incremental actions are recovery+substitution only"
+}
