@@ -6,7 +6,7 @@
 
 > **برچسب ارقام:** همه فرصت‌های مالی **مدل‌شده / فرض‌محور / وابسته به سناریو** هستند — **نه پیش‌بینی** و **نه سود تحقق‌یافته**.
 
-> **داده مصنوعی است.** مبالغ به **دلار مدل (USD)** گزارش می‌شوند. اعداد از `final/Executive_Summary_Numbers.json` (script_version 1.9.0).
+> **داده مصنوعی است.** مبالغ به **دلار مدل (USD)** گزارش می‌شوند. اعداد از `final/Executive_Summary_Numbers.json` (script_version 1.10.0).
 
 > **مرجع اعداد:** پس از هر اجرا، منبع حقیقت [`final/Executive_Summary_Numbers.json`](final/Executive_Summary_Numbers.json) است.
 
