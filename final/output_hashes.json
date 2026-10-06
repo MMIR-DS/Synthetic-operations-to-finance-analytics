@@ -1,6 +1,6 @@
 {
   "run_id": "20260930T110335Z-7bf12fbb",
-  "script_version": "1.9.0",
+  "script_version": "1.10.0",
   "sha256": {
     "FactProduction.csv": "26f32dd0e2623be3cbab9b07dbb15630571387b10434c3e5c47fb13f0e0c6ba5",
     "FactSales.csv": "c962047308ab5e166f04b8e2f5a9e8829cc2043b2253058541b5b1ebd4cd32e8",

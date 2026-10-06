@@ -1,4 +1,4 @@
-"""10_pl_bridge.py — v1.9.0
+"""10_pl_bridge.py — v1.10.0
 P&L bridge at Product × Period using actual schema:
   BudgetRevenue → Volume + Price effects → ActualRevenue
   BudgetCOGS → VolumeCOGS + YieldVariance → ActualCOGS
