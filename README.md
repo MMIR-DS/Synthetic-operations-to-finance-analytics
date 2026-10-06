@@ -1,6 +1,6 @@
 # Operations → Financial Impact → Contribution Margin Decision Model
 
-**Version 1.10.0** — imaginary dairy factory domain skin · [نسخه فارسی / Persian README](README.fa.md) · `streamlit run dashboard/app_fa.py` — star-schema data model: `PeriodKey` on inventory, `DimPeriod`/`DimLocation`, SQLite PK/FK.
+**Version 1.10.0** — synthetic dairy factory case · [نسخه فارسی / Persian README](README.fa.md) · `streamlit run dashboard/app_fa.py` — star-schema data model: `PeriodKey` on inventory, `DimPeriod`/`DimLocation`, SQLite PK/FK.
 
 **Synthetic operations-to-finance analytics portfolio project**
 
@@ -18,7 +18,7 @@ This project demonstrates how an operational capacity shortfall can be translate
 
 ---
 
-## Domain (dairy)
+## Domain: dairy manufacturing
 
 | Element | In this model |
 |---------|----------------|
@@ -32,7 +32,7 @@ This project demonstrates how an operational capacity shortfall can be translate
 | COGS | VC = raw milk + packaging + process energy + other (see `docs/COGS_AND_BOM.md`) |
 
 
-## Business design (one step before the data)
+## Business design: one step before the data
 
 These documents define **what decision the model supports** before synthetic tables are interpreted as answers:
 
@@ -48,7 +48,7 @@ These documents define **what decision the model supports** before synthetic tab
 
 ## Financial decision problem
 
-At **North Valley Dairy** (imaginary), operations can see an OEE percentage, but Finance and Planning need a different answer: where does the operational shortfall become a financial exposure, and which mitigation action is worth paying for?
+At **North Valley Dairy** (synthetic), operations can see an OEE percentage, but Finance and Planning need a different answer: where does the operational shortfall become a financial exposure, and which mitigation action is worth paying for?
 
 - How much **contribution margin** remains exposed after inventory and mitigation?
 - Which **SKU–month** has the highest value after recovery cost?
@@ -68,7 +68,7 @@ Operational loss / OEE
   → opening-inventory absorption
   → recovery + valid alternate-line substitution
   → residual lost sales
-  → revenue exposure & CM exposure
+  → revenue exposure and CM exposure
   → net CM opportunity after recovery cost
 ```
 
@@ -162,7 +162,7 @@ tests/test_fixture_two_period.py      # manual expected-value fixture
 config is written to output/:
   ModelAssumptions.csv
   ScenarioParameters.csv
-output/   # dimensions & facts (included in this package as a reference snapshot;
+output/   # dimensions and facts (included in this package as a reference snapshot;
           # regenerated fresh by 01_generate_synthetic_data_fixed.py on every run)
 final/    # analytics outputs, integrity, SQLite
 ```
@@ -213,7 +213,7 @@ python tests/test_fixture_two_period.py
 python tests/test_decision_baseline_action.py
 python tests/test_pl_bridge.py
 python 05_build_sqlite_with_keys.py
-python 04_build_executive_pack.py       # after 07–10 so Decision + P&L layer are included
+python 04_build_executive_pack.py       # after 07–10 so the Decision and P&L layers are included
 ```
 
 Order matters: **04 must run after 07–10**. Prefer `run_pipeline.py` so step order stays correct.
@@ -224,7 +224,7 @@ Order matters: **04 must run after 07–10**. Prefer `run_pipeline.py` so step o
 Arithmetic and domain controls (all PASS on the reference run), including:
 
 - OEE ∈ [0, 1]
-- Inventory mass balance & opening→closing continuity
+- Inventory mass balance and opening-to-closing continuity
 - Demand-gap waterfall at full precision  
   `GrossGap = InvAbsorbed + Recovered + Substituted + LostSales`
 - `NetCMOpportunity = ProtectedCM − RecoveryCost`
@@ -265,7 +265,7 @@ pip install -r dashboard/requirements-dashboard.txt
 streamlit run dashboard/app.py
 ```
 
-Pages: **Executive decision · Decision ranking · P&L bridge · Product economics · Sensitivity · Scenarios**.  
+Pages: **Executive decision · Decision ranking · P&L bridge · Product economics · Sensitivity · Scenarios**.
 Reads `final/` + `output/` only (does not re-run the pipeline).
 
 ## Limitations (explicit)
@@ -274,7 +274,7 @@ Reads `final/` + `output/` only (does not re-run the pipeline).
 - No production lead time / backlog carry-over (unmet demand is treated as in-period loss risk)  
 - Recovery cost is a **tiered unit cost**, not a full project / CAPEX model  
 - **Total FG holding** is context/sensitivity; **incremental holding** is an **attributed proxy** on absorbed units — not a full baseline-vs-mitigation inventory counterfactual  
-- CM excludes fixed overhead, depreciation, and allocated SG&A  
+- CM excludes fixed overhead, depreciation, and allocated SG&A.
 - Probability of capture and time-to-realize are not modeled  
 - Interactive exploration via Streamlit (`dashboard/app.py`); static charts still in `final/charts/`
 
