@@ -1,0 +1,7 @@
+DowntimeReasonID,Reason,Category,LossType,Events,Minutes,ShareOfMinutes
+D8,Quality hold / lab reject,Quality,Quality,185,4532,0.1906
+D6,SKU changeover (allergen / pack size),Planned,Availability,159,4185,0.176
+D1,Raw milk / ingredient shortage,Material,Availability,148,3945,0.1659
+D2,Filler / pasteurizer breakdown,Equipment,Availability,159,3924,0.165
+D3,Utilities fault (steam/power/cooling),Equipment,Availability,150,3799,0.1597
+D7,Micro-stops / speed loss on filler,Process,Performance,133,3396,0.1428

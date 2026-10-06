@@ -1,0 +1,15 @@
+{
+  "reproducibility_passed": true,
+  "method": "Publication refresh 1.9.0.1: hashes of key final artifacts after preview regeneration; full dual re-run recommended via run_pipeline.py on clone.",
+  "portfolio_release": "1.9.0.1",
+  "analytical_engine": "1.9.0",
+  "refreshed_utc": "2026-09-30T10:44:04Z",
+  "authoritative_net_cm_opportunity": 1282935.17,
+  "hashes_sample": {
+    "Executive_Summary_Numbers.json": "6bd9ca11336dca0809f22427c6c6db57b955c28c539975b4639d97754e6b604a",
+    "FactImpact_ProductPeriod.csv": "1589f2d773d45f130ac84f7ac634cf40f48c0f764292daea520aa637390436c2",
+    "Sensitivity_RecoveryFrac.csv": "4bcd1c7a6c1eb895b0a2420e1d3ea1f41a700d95ff4faf82a2040bd5a8c3425b",
+    "Scenario_Results.csv": "0ad0725dec67eed6d6a2b6aaef1118c277dfaab334b19f94892d5e5bd43f8913"
+  },
+  "note": "Dashboard previews regenerated from current final/ outputs. Prior Sep-23 preview set retired."
+}

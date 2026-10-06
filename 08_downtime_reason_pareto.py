@@ -15,10 +15,12 @@ def main():
     reason = pd.read_csv(OUT / "DimDowntimeReason.csv")
     m = dt.merge(reason, on="DowntimeReasonID", how="left")
     if "DurationMinutes" not in m.columns:
+        # try common names
         for c in m.columns:
             if "Duration" in c or "Minute" in c:
                 m = m.rename(columns={c: "DurationMinutes"})
                 break
+    # columns may vary slightly across generator versions
     key_cols = [c for c in ["DowntimeReasonID", "Reason", "Category", "PlannedUnplanned", "LossType"] if c in m.columns]
     event_col = "DowntimeEventID" if "DowntimeEventID" in m.columns else m.columns[0]
     g = (
@@ -32,7 +34,7 @@ def main():
     g.to_csv(FIN / "Downtime_Reason_Pareto.csv", index=False)
     summary = {
         "total_minutes": float(total),
-        "top_reason": g.iloc[0].Reason if len(g) and "Reason" in g.columns else None,
+        "top_reason": g.iloc[0].Reason if len(g) else None,
         "top_share": float(g.iloc[0].ShareOfMinutes) if len(g) else None,
         "note": "Descriptive Pareto only; recovery rates are not yet reason-specific",
     }

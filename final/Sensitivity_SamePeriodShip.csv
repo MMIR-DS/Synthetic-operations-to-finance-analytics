@@ -1,0 +1,3 @@
+SamePeriodShip,Label,TotalShipments,TotalLostVsDemand,EndingInventory,ProductMonthsShort,LostDelta_vs_baseline
+1,Same-period ship allowed,2373387,115319,163496,37,0
+0,Opening-only ship (no same-period production),2187302,301404,349581,35,186085

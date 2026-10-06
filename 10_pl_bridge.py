@@ -65,8 +65,10 @@ def main():
 
         volume_eff = (aq - bq) * bp
         price_eff = aq * (ap - bp)
+        # Product-level mix is zero; identity: Budget + Vol + Price ≈ Actual
         mix_eff = 0.0
         bridge_rev = br + volume_eff + mix_eff + price_eff
+        # Close tiny float residual into price effect for display identity
         residual = ar - bridge_rev
         price_eff += residual
         bridge_rev = br + volume_eff + mix_eff + price_eff
@@ -103,6 +105,7 @@ def main():
     detail = pd.DataFrame(rows)
     detail.to_csv(FIN / "PL_Bridge_Detail.csv", index=False)
 
+    # Revenue identity
     rev_err = (
         detail.BudgetRevenue
         + detail.VolumeEffect

@@ -1,0 +1,72 @@
+PRAGMA foreign_keys=ON, orphan_rejected=True, violations=0
+PRIMARY KEYS:
+  Bridge_ProductLineCapability: ['ProductID', 'LineID']
+  CaseTrace: (none)
+  DimBOMComponent: ['ComponentID']
+  DimDate: ['DateKey']
+  DimDowntimeReason: ['DowntimeReasonID']
+  DimEquipment: ['EquipmentID']
+  DimLine: ['LineID']
+  DimLocation: ['LocationID']
+  DimPeriod: ['PeriodKey']
+  DimProduct: ['ProductID']
+  DimScenario: ['ScenarioID']
+  FactBOMUsage: ['PeriodKey', 'ProductID', 'ComponentID']
+  FactCOGSVariance: ['PeriodKey', 'ProductID']
+  FactDemand: ['PeriodKey', 'ProductID', 'DemandType', 'ScenarioID']
+  FactDowntime: ['DowntimeEventID']
+  FactFinancialPlan: ['PeriodKey', 'ProductID', 'ScenarioID']
+  FactImpact_ProductPeriod: ['PeriodKey', 'ProductID']
+  FactInventorySnapshot: ['PeriodKey', 'ProductID', 'LocationID']
+  FactOEE_Run: ['ProductionRunID']
+  FactProduction: ['ProductionRunID']
+  FactSales: ['SalesTransactionID']
+  ModelAssumptions: ['Parameter']
+  Opportunity_Prioritization: (none)
+  PL_Bridge_Summary: ['PeriodKey']
+  PVM_Bridge: ['PeriodKey', 'ProductID']
+  ScenarioParameters: ['ScenarioID']
+  Scenario_Results: ['ScenarioID']
+FOREIGN KEYS:
+  Bridge_ProductLineCapability.LineID -> DimLine.LineID
+  Bridge_ProductLineCapability.ProductID -> DimProduct.ProductID
+  CaseTrace.ProductID -> DimProduct.ProductID
+  CaseTrace.PeriodKey -> DimPeriod.PeriodKey
+  DimEquipment.LineID -> DimLine.LineID
+  FactBOMUsage.ComponentID -> DimBOMComponent.ComponentID
+  FactBOMUsage.ProductID -> DimProduct.ProductID
+  FactBOMUsage.PeriodKey -> DimPeriod.PeriodKey
+  FactCOGSVariance.ProductID -> DimProduct.ProductID
+  FactCOGSVariance.PeriodKey -> DimPeriod.PeriodKey
+  FactDemand.ScenarioID -> DimScenario.ScenarioID
+  FactDemand.ProductID -> DimProduct.ProductID
+  FactDemand.PeriodKey -> DimPeriod.PeriodKey
+  FactDowntime.DowntimeReasonID -> DimDowntimeReason.DowntimeReasonID
+  FactDowntime.LineID -> DimLine.LineID
+  FactDowntime.EquipmentID -> DimEquipment.EquipmentID
+  FactDowntime.DateKey -> DimDate.DateKey
+  FactFinancialPlan.ScenarioID -> DimScenario.ScenarioID
+  FactFinancialPlan.ProductID -> DimProduct.ProductID
+  FactFinancialPlan.PeriodKey -> DimPeriod.PeriodKey
+  FactImpact_ProductPeriod.LineID -> DimLine.LineID
+  FactImpact_ProductPeriod.ProductID -> DimProduct.ProductID
+  FactImpact_ProductPeriod.PeriodKey -> DimPeriod.PeriodKey
+  FactInventorySnapshot.LocationID -> DimLocation.LocationID
+  FactInventorySnapshot.ProductID -> DimProduct.ProductID
+  FactInventorySnapshot.PeriodKey -> DimPeriod.PeriodKey
+  FactOEE_Run.LineID -> DimLine.LineID
+  FactOEE_Run.ProductID -> DimProduct.ProductID
+  FactOEE_Run.DateKey -> DimDate.DateKey
+  FactOEE_Run.ProductionRunID -> FactProduction.ProductionRunID
+  FactProduction.LineID -> DimLine.LineID
+  FactProduction.ProductID -> DimProduct.ProductID
+  FactProduction.DateKey -> DimDate.DateKey
+  FactSales.ProductID -> DimProduct.ProductID
+  FactSales.DateKey -> DimDate.DateKey
+  Opportunity_Prioritization.ProductID -> DimProduct.ProductID
+  Opportunity_Prioritization.PeriodKey -> DimPeriod.PeriodKey
+  PL_Bridge_Summary.PeriodKey -> DimPeriod.PeriodKey
+  PVM_Bridge.ProductID -> DimProduct.ProductID
+  PVM_Bridge.PeriodKey -> DimPeriod.PeriodKey
+  ScenarioParameters.ScenarioID -> DimScenario.ScenarioID
+  Scenario_Results.ScenarioID -> DimScenario.ScenarioID

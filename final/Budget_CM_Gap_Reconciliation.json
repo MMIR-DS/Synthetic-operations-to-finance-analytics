@@ -1,0 +1,15 @@
+{
+  "figure_class": "Modeled / synthetic \u2014 explanatory, not a full P&L audit",
+  "budget_cm": 85153552.0,
+  "actual_cm": 61661794.84,
+  "cm_shortfall_vs_budget": 23491757.16,
+  "oee_path_residual_cm_exposure": 1322823.59,
+  "oee_path_net_cm_opportunity": 1282935.17,
+  "share_of_shortfall_explained_by_residual_exposure": 0.0563,
+  "unexplained_or_other_drivers_approx": 22168933.57,
+  "narrative": [
+    "Budget CM shortfall is plan-vs-actual commercial gap.",
+    "Residual CM exposure is only modeled margin on units still unmet after the OEE mitigation waterfall.",
+    "Most of the budget miss is NOT claimed as OEE-driven lost sales in this model."
+  ]
+}

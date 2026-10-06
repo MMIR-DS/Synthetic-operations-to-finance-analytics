@@ -1,1 +1,1 @@
-# Shared modules for OEE→CM pipeline
+"""Shared pure functions used by engine and sensitivity (single source of truth)."""

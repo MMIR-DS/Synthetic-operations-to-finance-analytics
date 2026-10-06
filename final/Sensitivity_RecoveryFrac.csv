@@ -1,0 +1,4 @@
+RecoveryFrac,Label,RecoveredUnits,SubstitutedUnits,LostSalesUnits,ProtectedCM,RecoveryCost,NetCMOpportunity,WaterfallResidualMaxAbs,FlatModeUnitCost,Note
+0.1,Conservative,11531.9,45287.98,58499.12,1745484.38,658384.31,1087100.07,0.0,8.0,Substitution capped at baseline demonstrated alternate-line volume
+0.2,Baseline,23063.8,45287.98,46967.22,2086407.49,803472.31,1282935.17,0.0,8.0,Substitution capped at baseline demonstrated alternate-line volume
+0.4,Optimistic,46127.6,36958.55,32232.85,2510145.46,1006708.3,1503437.16,0.0,8.0,Substitution capped at baseline demonstrated alternate-line volume

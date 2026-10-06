@@ -1,0 +1,336 @@
+{
+  "run_id": "20260930T110335Z-7bf12fbb",
+  "script_version": "1.9.0",
+  "timestamp_utc": "2026-09-30T11:03:35.419630+00:00",
+  "environment": {
+    "python": "3.12.3",
+    "pandas": "3.0.3",
+    "numpy": "2.4.4",
+    "random_seed_generator": 42
+  },
+  "checks": [
+    {
+      "name": "OEE_in_range",
+      "passed": true,
+      "detail": "",
+      "grain": "ProductionRun",
+      "tolerance": "",
+      "max_error": "0.964429",
+      "failed_rows": 0
+    },
+    {
+      "name": "Good_le_Total",
+      "passed": true,
+      "detail": "",
+      "grain": "ProductionRun",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "alternate_line_differs_from_primary",
+      "passed": true,
+      "detail": "Alternate capability must use a different physical line; products without one remain null",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "gap_waterfall_full_precision",
+      "passed": true,
+      "detail": "GrossGap = InvAbs + Recovered + Substituted + LostSales",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "1e-6",
+      "max_error": "0.0",
+      "failed_rows": 0
+    },
+    {
+      "name": "net_cm_opportunity_identity",
+      "passed": true,
+      "detail": "NetCMOpportunity = ProtectedCM - RecoveryCost",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "1e-6",
+      "max_error": "0.0",
+      "failed_rows": 0
+    },
+    {
+      "name": "alt_line_slack_not_oversubscribed",
+      "passed": true,
+      "detail": "Sum of substituted hours per (Period, AltLine) must not exceed that line's available slack",
+      "grain": "PeriodKey\u00d7AltLineID",
+      "tolerance": "1e-6",
+      "max_error": "0.0",
+      "failed_rows": 0
+    },
+    {
+      "name": "same_period_ship_waterfall_aligned",
+      "passed": true,
+      "detail": "Impact/scenario shippable production uses SAME_PERIOD_SHIP=1",
+      "grain": "ModelAssumptions\u00d7Impact",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "impact_one_primary_line_per_product_period",
+      "passed": true,
+      "detail": "LineID is the primary/allocated line for the product-month; PK grain is PeriodKey\u00d7ProductID",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "PVM_group_level",
+      "passed": true,
+      "detail": "ActualRev-BudgetRev = Vol+Mix+Price+Residual",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "abs=0.05 + rel=1e-09*|delta|",
+      "max_error": "6.984919e-10",
+      "failed_rows": 0
+    },
+    {
+      "name": "PVM_total_level",
+      "passed": true,
+      "detail": "total_error=-7.450581e-09",
+      "grain": "Portfolio total",
+      "tolerance": "abs=0.05 + rel=1e-09*|delta|",
+      "max_error": "-7.450581e-09",
+      "failed_rows": 0
+    },
+    {
+      "name": "no_inf_in_ROI",
+      "passed": true,
+      "detail": "",
+      "grain": "ProductID\u00d7PeriodKey (CMExposure>0)",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "UsableInventory_rounding",
+      "passed": true,
+      "detail": "",
+      "grain": "Period\u00d7Product\u00d7Location",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "inventory_rollforward_columns",
+      "passed": true,
+      "detail": "",
+      "grain": "FactInventorySnapshot schema",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "opening_available_inventory_column",
+      "passed": true,
+      "detail": "",
+      "grain": "FactInventorySnapshot schema",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "inventory_mass_balance",
+      "passed": true,
+      "detail": "",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "0",
+      "max_error": "0.0",
+      "failed_rows": 0
+    },
+    {
+      "name": "inventory_continuity",
+      "passed": true,
+      "detail": "",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "0",
+      "max_error": "0.0",
+      "failed_rows": 0
+    },
+    {
+      "name": "sales_le_firm_demand",
+      "passed": true,
+      "detail": "",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "0",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "variable_cost_le_price",
+      "passed": true,
+      "detail": "StandardVariableCost <= StandardPrice for all products",
+      "grain": "DimProduct",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "non_negative_price_and_vc",
+      "passed": true,
+      "detail": "",
+      "grain": "DimProduct",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "recovery_frac_in_unit_interval",
+      "passed": true,
+      "detail": "RECOVERY_FRAC=0.2",
+      "grain": "ModelAssumptions",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "protected_units_le_gross_gap",
+      "passed": true,
+      "detail": "",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "1e-6",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "uneconomic_mitigation_rows_counted",
+      "passed": true,
+      "detail": "rows_where_recovery_cost>protected_cm=0",
+      "grain": "ProductID\u00d7PeriodKey",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "no_unexpected_nonfinite",
+      "passed": true,
+      "detail": "count=0 (RecoveryROI NaN allowed)",
+      "grain": "all core tables",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    },
+    {
+      "name": "scenario_parameters_coverage",
+      "passed": true,
+      "detail": "missing_in_params=[]",
+      "grain": "ScenarioID",
+      "tolerance": "",
+      "max_error": "",
+      "failed_rows": 0
+    }
+  ],
+  "passed": true,
+  "notes": [
+    "CM = NetRevenue - StandardVariableCost (variable only; no fixed overhead)",
+    "Sales = Shipments exactly; GoodProduction is post-scrap",
+    "OpeningAvailableInventory is used to absorb same-period production shortfalls; closing inventory is never used for that period",
+    "AlternateLineID is only assigned when a distinct capable alternate line exists",
+    "Scenario coefficients loaded from ScenarioParameters.csv",
+    "NetCMOpportunity is a modeled mitigation-value metric, not total company financial opportunity",
+    "S3S5 not used (legacy typo)",
+    "v1.4: AltLine slack is decremented as consumed (Period,AltLine) so it cannot be double-claimed by two products in the same period"
+  ],
+  "summary": {
+    "run_id": "20260930T110335Z-7bf12fbb",
+    "script_version": "1.9.0",
+    "total_revenue_actual": 209969323.84,
+    "total_cm_actual": 61661794.84,
+    "budget_revenue": 247700780.0,
+    "budget_cm": 85153552.0,
+    "pvm_residual_sum": 0.0,
+    "pvm_max_group_error": 7e-10,
+    "oee_avg_time_weighted": 0.8398,
+    "total_gross_gap_units": 133743,
+    "inventory_absorbed_units": 18424,
+    "recovered_units": 23063,
+    "substituted_units": 45287,
+    "potential_lost_sales_units": 46967,
+    "revenue_exposure": 4584996.88,
+    "cm_exposure": 1322823.59,
+    "recovery_cost": 803472.31,
+    "protected_cm": 2086407.49,
+    "net_cm_opportunity": 1282935.17,
+    "inventory_holding_cost": 855276.41,
+    "net_cm_after_holding": 427658.76,
+    "incremental_holding_cost": 19106.55,
+    "net_cm_after_incremental_holding": 1263828.62,
+    "figure_class": "Modeled / assumption-driven / not a forecast",
+    "recovery_cost_mode": "STEPPED",
+    "holding_cost_annual_wacc": 0.18,
+    "opportunity_bridge": {
+      "cm_exposure_lost_sales": 1322823.59,
+      "protected_cm_from_recovery_and_substitution": 2086407.49,
+      "recovery_cost": 803472.31,
+      "net_cm_opportunity": 1282935.17,
+      "identity": "NetCMOpportunity = ProtectedCM - RecoveryCost",
+      "note": "NetCMOpportunity is NOT CMExposure - RecoveryCost; it is the modeled value of mitigation actions after recovery/substitution cost"
+    },
+    "gap_waterfall": {
+      "gross_gap": 133743.0,
+      "inventory_absorbed": 18424.0,
+      "recovered": 23063.8,
+      "substituted": 45287.97575757574,
+      "lost_sales": 46967.22424242426,
+      "residual": 0.0,
+      "identity": "GrossGap = InvAbs + Recovered + Substituted + LostSales"
+    },
+    "bottleneck_product_periods": 18,
+    "oee_directly_multiplied_by_revenue": false,
+    "recovery_frac_assumption": 0.2,
+    "recovery_cost_unit_assumption": 8.0,
+    "currency": "USD",
+    "volume_unit": "EA",
+    "S3S5_status": "Removed: original typo with no valid business definition; use S3 and S5 separately",
+    "data_dictionary": "DATA_DICTIONARY.md",
+    "context": {
+      "data_type": "synthetic",
+      "period_coverage": "FY2024 (202401-202412)",
+      "product_count": 8,
+      "reporting_currency": "USD",
+      "volume_unit": "EA",
+      "oee_baseline_time_weighted": 0.8398,
+      "recovery_frac": 0.2,
+      "same_period_ship": 1,
+      "primary_line_rule": "PRIMARY_ALLOCATED",
+      "recovery_cost_unit_usd": 8.0,
+      "cm_definition": "Managerial CM before fixed costs (NetRevenue - StandardVariableCost)",
+      "disclaimer": "Figures are model outputs under documented assumptions, not real-plant results"
+    }
+  },
+  "row_counts": {
+    "FactProduction": 2091,
+    "FactImpact": 96,
+    "PVM_Bridge": 96,
+    "Scenario_Results": 7,
+    "CaseTrace": 18,
+    "FactInventorySnapshot": 192,
+    "FactSales": 296,
+    "ScenarioParameters": 8
+  },
+  "tolerances": {
+    "PVM_ABS_TOL": 0.05,
+    "PVM_REL_TOL": 1e-09
+  },
+  "resolved_config": {
+    "RECOVERY_FRAC": 0.2,
+    "RECOVERY_COST_UNIT": 8.0,
+    "SAME_PERIOD_SHIP": 1,
+    "HOLDING_COST_ANNUAL_WACC": 0.18,
+    "RECOVERY_COST_MODE": "STEPPED",
+    "RECOVERY_TIER1_COST": 2.0,
+    "RECOVERY_TIER2_COST": 7.0,
+    "RECOVERY_TIER3_COST": 14.0,
+    "PRIMARY_LINE_RULE": "PRIMARY_ALLOCATED",
+    "BOTTLENECK_THRESH": 0.95,
+    "currency": "USD",
+    "volume_unit": "EA",
+    "config_source": "ModelAssumptions.csv"
+  }
+}
