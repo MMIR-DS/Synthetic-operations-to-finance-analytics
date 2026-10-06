@@ -142,7 +142,7 @@ def page_pl_bridge():
             st.dataframe(pd.read_csv(det).head(50), width="stretch", hide_index=True)
 
 
-def page_decision(summary: dict):
+def page_decision(summary: dict, product_names: dict):
     st.header("Decision — Baseline vs Action")
     st.info(
         "**Baseline** = inventory buffer only. **Action** = recovery + alternate line. "
@@ -175,11 +175,14 @@ def page_decision(summary: dict):
             "PeriodKey", "ProductID", "RecommendedAction",
             "Delta_NetOperationalCM", "Expected_RiskAdjustedCM",
             "MitigationHours", "NetCM_per_ConstrainedHour",
-        ]]
+        ]].copy()
+        show.insert(2, "ProductName", show["ProductID"].astype(str).map(product_names).fillna(show["ProductID"]))
         st.dataframe(show, width="stretch", hide_index=True)
+        chart_top = top.head(10).copy()
+        chart_top["ProductName"] = chart_top["ProductID"].astype(str).map(product_names).fillna(chart_top["ProductID"])
         fig = px.bar(
-            top.head(10),
-            x="ProductID",
+            chart_top,
+            x="ProductName",
             y="Expected_RiskAdjustedCM",
             color="RecommendedAction",
             title="Top 10 by expected risk-adjusted CM",
@@ -197,16 +200,20 @@ def page_decision(summary: dict):
         ).head(15)
         if len(cap):
             st.dataframe(
-                cap[[
-                    "PeriodKey", "ProductID", "MitigationHours",
-                    "NetCM_per_ConstrainedHour", "ProtectedCM_per_ConstrainedHour",
-                    "Delta_NetOperationalCM",
-                ]],
+                cap.assign(
+                ProductName=cap["ProductID"].astype(str).map(product_names).fillna(cap["ProductID"])
+            )[[
+                "PeriodKey", "ProductID", "ProductName", "MitigationHours",
+                "NetCM_per_ConstrainedHour", "ProtectedCM_per_ConstrainedHour",
+                "Delta_NetOperationalCM",
+            ]],
                 width="stretch", hide_index=True,
             )
+            cap_chart = cap.head(10).copy()
+            cap_chart["ProductName"] = cap_chart["ProductID"].astype(str).map(product_names).fillna(cap_chart["ProductID"])
             fig2 = px.bar(
-                cap.head(10),
-                x="ProductID",
+                cap_chart,
+                x="ProductName",
                 y="NetCM_per_ConstrainedHour",
                 title="Top 10 by Net CM / constrained hour",
             )
@@ -315,7 +322,11 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
         ))
         fig.update_layout(height=380, margin=dict(t=30, b=40, l=40, r=20))
         st.plotly_chart(fig, width="stretch")
-        st.caption("Identity: GrossGap = InvAbs + Recovered + Substituted + LostSales")
+        residual = float(gap.get("residual") or 0.0)
+        st.caption(
+            "Identity: GrossGap = InvAbs + Recovered + Substituted + LostSales "
+            f"· reconciliation residual = {residual:,.2f} units"
+        )
 
     st.subheader("Contribution-margin decision bridge")
     prot = float(summary.get("protected_cm") or (summary.get("opportunity_bridge") or {}).get("protected_cm_from_recovery_and_substitution") or 0)
@@ -339,19 +350,22 @@ def page_executive(summary: dict, impact: pd.DataFrame, sens: pd.DataFrame):
 
     if len(sens):
         st.subheader("Recovery fraction sensitivity (precomputed)")
+        sens_plot = sens.copy()
+        # The pipeline tests discrete cases only; avoid implying an untested/interpolated 0.30 case.
+        sens_plot["RecoveryCase"] = sens_plot["RecoveryFrac"].map(lambda x: f"{float(x):.0%}")
         fig3 = px.bar(
-            sens,
-            x="RecoveryFrac",
+            sens_plot,
+            x="RecoveryCase",
             y="NetCMOpportunity",
-            text=sens["NetCMOpportunity"].map(lambda v: fmt_money(v, 2)),
-            labels={"RecoveryFrac": "Recovery fraction", "NetCMOpportunity": "Net CM opportunity ($)"},
+            text=sens_plot["NetCMOpportunity"].map(lambda v: fmt_money(v, 2)),
+            labels={"RecoveryCase": "Tested recovery fraction", "NetCMOpportunity": "Net CM opportunity ($)"},
         )
         fig3.update_traces(textposition="outside")
         fig3.update_layout(height=360, margin=dict(t=30, b=40))
         st.plotly_chart(fig3, width="stretch")
 
 
-def page_product(impact: pd.DataFrame, products: list):
+def page_product(impact: pd.DataFrame, products: list, product_names: dict):
     st.header("Product deep dive")
     if impact.empty:
         st.warning("FactImpact_ProductPeriod.csv not found.")
@@ -359,7 +373,11 @@ def page_product(impact: pd.DataFrame, products: list):
 
     left, right = st.columns([1, 3])
     with left:
-        prod = st.selectbox("Product", options=["(All)"] + products)
+        prod_options = ["(All)"] + [product_names.get(p, p) for p in products]
+        prod_label = st.selectbox("Product", options=prod_options)
+        prod = "(All)" if prod_label == "(All)" else next(
+            (p for p in products if product_names.get(p, p) == prod_label), prod_label
+        )
         periods = sorted(impact.PeriodKey.astype(str).unique())
         per = st.multiselect("Periods", periods, default=periods)
     df = impact.copy()
@@ -399,11 +417,12 @@ def page_product(impact: pd.DataFrame, products: list):
         .sort_values("NetCMOpportunity", ascending=False)
     )
 
+    agg["ProductName"] = agg["ProductID"].astype(str).map(product_names).fillna(agg["ProductID"])
     top = agg.head(10)
     st.caption("Ranking is by modeled Net CM opportunity — not OEE. Use the table below for CM exposure and holding-cost context.")
     fig = px.bar(
         top,
-        x="ProductID",
+        x="ProductName",
         y="NetCMOpportunity",
         text="NetCMOpportunity",
         labels={"NetCMOpportunity": "Net CM opportunity ($)"},
@@ -419,6 +438,7 @@ def page_product(impact: pd.DataFrame, products: list):
         for c in [
             "PeriodKey",
             "ProductID",
+            "ProductName",
             "LineID",
             "OEE",
             "GrossGap",
@@ -578,6 +598,12 @@ def page_scenarios(scen: pd.DataFrame):
 def main():
     summary = load_json("Executive_Summary_Numbers.json")
     impact = load_csv("final", "FactImpact_ProductPeriod.csv")
+    product_dim = load_csv("output", "DimProduct.csv")
+    product_names = (
+        dict(zip(product_dim["ProductID"].astype(str), product_dim["ProductName"].astype(str)))
+        if {"ProductID", "ProductName"}.issubset(product_dim.columns)
+        else {}
+    )
     sens = load_csv("final", "Sensitivity_RecoveryFrac.csv")
     ship = load_csv("final", "Sensitivity_SamePeriodShip.csv")
     scen = load_csv("final", "Scenario_Results.csv")
@@ -590,10 +616,10 @@ def main():
     elif page == "P&L Bridge":
         page_pl_bridge()
     elif page == "Decision":
-        page_decision(summary)
+        page_decision(summary, product_names)
     elif page == "Product deep dive":
         products = sorted(impact.ProductID.astype(str).unique()) if len(impact) else []
-        page_product(impact, products)
+        page_product(impact, products, product_names)
     elif page == "Sensitivity":
         page_sensitivity(sens, ship, impact, assumptions)
     else:
