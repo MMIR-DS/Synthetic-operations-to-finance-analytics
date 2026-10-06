@@ -1,0 +1,7 @@
+P_REALIZE,Label,Delta_NetOperationalCM,Expected_RiskAdjustedCM
+0.4,Conservative,1282935.16,513174.06
+0.5,Low,1282935.16,641467.58
+0.65,Baseline assumption,1282935.16,833907.85
+0.8,High,1282935.16,1026348.13
+0.85,Optimistic,1282935.16,1090494.89
+1.0,Full realization (ceiling),1282935.16,1282935.16

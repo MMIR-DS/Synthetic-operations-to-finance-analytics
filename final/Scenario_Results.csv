@@ -1,0 +1,8 @@
+ScenarioID,ScenarioName,ScenarioType,OEE_Uplift_pts,Output_Factor,Demand_Factor,Recovery_Frac_Mult,LostUnits_baseline,LostUnits_scenario,CMExposure_baseline,CMExposure_scenario,CMImpact,RecoveryCost,NetCMImpact_after_RecoveryCost,Confidence
+S1,OEE +1pt,Operational,0.01,1.0,1.0,1.0,46967,41388,1322823.59,1167545.75,155277.84,751715.09,-596437.25,Medium
+S3,OEE +3pt,Operational,0.03,1.0,1.0,1.0,46967,30970,1322823.59,880420.34,442403.25,647206.12,-204802.87,Low
+S5,OEE +5pt,Operational,0.05,1.0,1.0,1.0,46967,23137,1322823.59,663794.82,659028.77,542483.94,116544.84,Low
+SD10,Downtime -10%,Operational,0.0,1.02,1.0,1.0,46967,37779,1322823.59,1067175.72,255647.87,718681.14,-463033.27,Medium
+SQ,Scrap -30%,Operational,0.0,1.0,1.0,1.0,46967,40107,1322823.59,1136463.48,186360.11,744702.9,-558342.79,Medium
+SDP,Demand +10%,Demand,0.0,1.0,1.1,1.0,46967,159524,1322823.59,4657592.72,-3334769.13,600059.38,-3934828.5,Low
+SR,Recovery +50%,Recovery,0.0,1.0,1.0,1.5,46967,39180,1322823.59,1097890.16,224933.43,910789.12,-685855.68,Low

@@ -1,0 +1,16 @@
+{
+  "total_budget_revenue": 247700780.0,
+  "total_actual_revenue": 209969323.84,
+  "total_volume_effect": -21766905.0,
+  "total_price_effect": -15964551.16,
+  "total_budget_cogs": 162547228.0,
+  "total_actual_cogs": 163418466.0,
+  "total_yield_variance": 7935518.0,
+  "total_budget_gp": 85153552.0,
+  "total_actual_gp": 46550857.84,
+  "gp_variance": -38602694.16,
+  "revenue_bridge_max_abs_error": 2.3283064365386963e-10,
+  "cogs_bridge_max_abs_error": 0.0,
+  "figure_class": "Modeled / synthetic \u2014 Gross Profit only (no fixed overhead)",
+  "note": "Product-level MixEffect=0; portfolio mix is embedded in volume/price at SKU grain."
+}

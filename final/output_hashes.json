@@ -1,0 +1,14 @@
+{
+  "run_id": "20260930T110335Z-7bf12fbb",
+  "script_version": "1.9.0",
+  "sha256": {
+    "FactProduction.csv": "26f32dd0e2623be3cbab9b07dbb15630571387b10434c3e5c47fb13f0e0c6ba5",
+    "FactSales.csv": "c962047308ab5e166f04b8e2f5a9e8829cc2043b2253058541b5b1ebd4cd32e8",
+    "FactDemand.csv": "c51aa8d8a01ccdb6152a441f256921cc8299799c634bb1149ec31b4c4fc617cd",
+    "FactInventorySnapshot.csv": "1158e1e366f7039c8d9b876567be51a8a15aaf5b9fa1354e1b7ef84be1ca0037",
+    "FactImpact_ProductPeriod.csv": "1589f2d773d45f130ac84f7ac634cf40f48c0f764292daea520aa637390436c2",
+    "PVM_Bridge.csv": "4a7b76cb0bd7d6d19eca683715211d9b53786ae80ddea51bcc2cec6ab5504a43",
+    "Scenario_Results.csv": "0ad0725dec67eed6d6a2b6aaef1118c277dfaab334b19f94892d5e5bd43f8913",
+    "Opportunity_Prioritization.csv": "4adef13186121c27f2e80a1dd8959f9f1a0b18e0a2d8c42cbcc01ab75f15be4b"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "description": "Sensitivity of mitigation economics to RECOVERY_FRAC",
+  "assumption": "RECOVERY_FRAC is a modeling parameter, not an empirically fitted plant rate",
+  "resolved_config": {
+    "RECOVERY_COST_UNIT": 8.0,
+    "RECOVERY_FRAC_BASELINE": 0.2,
+    "source": "/home/workdir/artifacts/portfolio_v14/corrected_pipeline/output/ModelAssumptions.csv"
+  },
+  "results": [
+    {
+      "RecoveryFrac": 0.1,
+      "Label": "Conservative",
+      "RecoveredUnits": 11531.9,
+      "SubstitutedUnits": 45287.98,
+      "LostSalesUnits": 58499.12,
+      "ProtectedCM": 1745484.38,
+      "RecoveryCost": 658384.31,
+      "NetCMOpportunity": 1087100.07,
+      "WaterfallResidualMaxAbs": 0.0,
+      "FlatModeUnitCost": 8.0,
+      "Note": "Substitution capped at baseline demonstrated alternate-line volume"
+    },
+    {
+      "RecoveryFrac": 0.2,
+      "Label": "Baseline",
+      "RecoveredUnits": 23063.8,
+      "SubstitutedUnits": 45287.98,
+      "LostSalesUnits": 46967.22,
+      "ProtectedCM": 2086407.49,
+      "RecoveryCost": 803472.31,
+      "NetCMOpportunity": 1282935.17,
+      "WaterfallResidualMaxAbs": 0.0,
+      "FlatModeUnitCost": 8.0,
+      "Note": "Substitution capped at baseline demonstrated alternate-line volume"
+    },
+    {
+      "RecoveryFrac": 0.4,
+      "Label": "Optimistic",
+      "RecoveredUnits": 46127.6,
+      "SubstitutedUnits": 36958.55,
+      "LostSalesUnits": 32232.85,
+      "ProtectedCM": 2510145.46,
+      "RecoveryCost": 1006708.3,
+      "NetCMOpportunity": 1503437.16,
+      "WaterfallResidualMaxAbs": 0.0,
+      "FlatModeUnitCost": 8.0,
+      "Note": "Substitution capped at baseline demonstrated alternate-line volume"
+    }
+  ]
+}

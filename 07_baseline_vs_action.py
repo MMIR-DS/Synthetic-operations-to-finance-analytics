@@ -57,27 +57,33 @@ def main():
         price = float(r.ExpNetPrice)
         run_h = float(r.RunH) if float(r.RunH or 0) > 0 else 0.0
         good = float(r.GoodUnits or 0)
-        primary_rate = (good / run_h) if run_h > 1e-9 else 0.0
+        primary_rate = (good / run_h) if run_h > 1e-9 else 0.0  # units per hour
         alt_rate = float(r.AltRate or 0)
 
+        # --- Baseline: inventory only ---
         lost_b = gap_after_inv
         cm_exp_b = lost_b * cm_u
+        rev_exp_b = lost_b * price
         protected_b = 0.0
+        rec_cost_b = 0.0
         net_b = 0.0
 
+        # --- Action: engine path ---
         lost_a = float(r.PotentialLostSalesUnits)
         cm_exp_a = float(r.CMExposure)
+        rev_exp_a = float(r.RevenueExposure)
         protected_a = float(r.ProtectedCM)
         rec_cost_a = float(r.RecoveryCost)
         net_a = float(r.NetCMOpportunity)
         recovered = float(r.RecoveredUnits)
         subst = float(r.SubstitutedUnits)
 
-        delta_lost = lost_b - lost_a
-        delta_cm_exp = cm_exp_b - cm_exp_a
-        delta_net = net_a - net_b
+        delta_lost = lost_b - lost_a  # units avoided by action
+        delta_cm_exp = cm_exp_b - cm_exp_a  # exposure avoided
+        delta_net = net_a - net_b  # = net_a
         expected_net = max(0.0, delta_net) * p_realize
 
+        # Recommended action label (simple rule)
         if delta_net <= 0 and recovered + subst <= 0:
             action = "A0_do_nothing_or_accept"
         elif recovered + subst <= 0 and absorb > 0:
@@ -91,6 +97,7 @@ def main():
         else:
             action = "A4_accept_shortfall"
 
+        # Constrained hours used by mitigation (primary recovery + alt subst)
         h_rec = (recovered / primary_rate) if primary_rate > 1e-9 and recovered > 0 else 0.0
         h_sub = (subst / alt_rate) if alt_rate > 1e-9 and subst > 0 else 0.0
         h_mit = h_rec + h_sub

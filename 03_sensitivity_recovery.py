@@ -106,6 +106,7 @@ def main():
             tier3_cost=t3_c,
         )
 
+
     subst_cap = impact["SubstitutedUnits"].astype(float).clip(lower=0)
     rows = []
 
@@ -158,7 +159,7 @@ def main():
             "RecoveryCost": round(float(np.sum(cost_list)), 2),
             "NetCMOpportunity": round(float(np.sum(net_list)), 2),
             "WaterfallResidualMaxAbs": max_res,
-            "FlatModeUnitCost": recovery_cost_unit,
+            "FlatModeUnitCost": recovery_cost_unit,  # only applies when RECOVERY_COST_MODE=FLAT,
             "Note": "Substitution capped at baseline demonstrated alternate-line volume",
         })
 

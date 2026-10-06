@@ -23,6 +23,7 @@ def rollforward(good: pd.DataFrame, firm: pd.DataFrame, same_period_ship: int) -
     gmap = good.set_index(["PeriodKey", "ProductID"])["GoodProduction"].to_dict()
     fmap = firm.set_index(["PeriodKey", "ProductID"])["FirmDemand"].to_dict()
 
+    # Seed opening from actual FactInventorySnapshot when available (else ~5% of month-1 good)
     opening = {}
     inv_path = OUT / "FactInventorySnapshot.csv"
     if inv_path.exists():
