@@ -177,6 +177,7 @@ def page_decision(summary: dict, product_names: dict):
             "MitigationHours", "NetCM_per_ConstrainedHour",
         ]].copy()
         show.insert(2, "ProductName", show["ProductID"].astype(str).map(product_names).fillna(show["ProductID"]))
+        show = show.drop(columns=["ProductID"])
         st.dataframe(show, width="stretch", hide_index=True)
         chart_top = top.head(10).copy()
         chart_top["ProductName"] = chart_top["ProductID"].astype(str).map(product_names).fillna(chart_top["ProductID"])
@@ -203,7 +204,7 @@ def page_decision(summary: dict, product_names: dict):
                 cap.assign(
                 ProductName=cap["ProductID"].astype(str).map(product_names).fillna(cap["ProductID"])
             )[[
-                "PeriodKey", "ProductID", "ProductName", "MitigationHours",
+                "PeriodKey", "ProductName", "MitigationHours",
                 "NetCM_per_ConstrainedHour", "ProtectedCM_per_ConstrainedHour",
                 "Delta_NetOperationalCM",
             ]],
@@ -382,6 +383,7 @@ def page_product(impact: pd.DataFrame, products: list, product_names: dict):
         per = st.multiselect("Periods", periods, default=periods)
     df = impact.copy()
     df["PeriodKey"] = df.PeriodKey.astype(str)
+    df["ProductName"] = df["ProductID"].astype(str).map(product_names).fillna(df["ProductID"])
     if per:
         df = df[df.PeriodKey.isin(per)]
     if prod != "(All)":
@@ -437,7 +439,6 @@ def page_product(impact: pd.DataFrame, products: list, product_names: dict):
         c
         for c in [
             "PeriodKey",
-            "ProductID",
             "ProductName",
             "LineID",
             "OEE",
@@ -480,18 +481,20 @@ def page_sensitivity(sens: pd.DataFrame, ship: pd.DataFrame, impact: pd.DataFram
                 f"at the baseline recovery assumption to {fmt_money(best['NetCMOpportunity'])} at the "
                 f"highest tested recovery case. The trade-off is that recovery adds cost as it adds protected CM."
             )
+            sens_plot = sens.copy()
+            sens_plot["RecoveryCase"] = sens_plot["RecoveryFrac"].map(lambda x: f"{float(x):.0%}")
             fig = go.Figure()
             fig.add_trace(go.Scatter(
-                x=sens.RecoveryFrac, y=sens.ProtectedCM, name="Protected CM", mode="lines+markers"
+                x=sens_plot.RecoveryCase, y=sens_plot.ProtectedCM, name="Protected CM", mode="lines+markers"
             ))
             fig.add_trace(go.Scatter(
-                x=sens.RecoveryFrac, y=sens.RecoveryCost, name="Recovery cost", mode="lines+markers"
+                x=sens_plot.RecoveryCase, y=sens_plot.RecoveryCost, name="Recovery cost", mode="lines+markers"
             ))
             fig.add_trace(go.Scatter(
-                x=sens.RecoveryFrac, y=sens.NetCMOpportunity, name="Net CM opportunity", mode="lines+markers"
+                x=sens_plot.RecoveryCase, y=sens_plot.NetCMOpportunity, name="Net CM opportunity", mode="lines+markers"
             ))
             fig.update_layout(
-                xaxis_title="Recovery fraction",
+                xaxis_title="Tested recovery fraction",
                 yaxis_title="$",
                 height=400,
                 legend=dict(orientation="h"),
